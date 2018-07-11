@@ -1,0 +1,48 @@
+{% set name = "mountainlab-js" %}
+{% set repo_owner = "tjd2002" %}
+{% set version = "0.4.1" %}
+#{% set sha256 = "4b4ab9845dba0e6a6fda172d69aff6da72c3e429dc1f3d30fa0935d315f40cb6" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/{{ repo_owner }}/{{ name }}
+  git_rev: conda-build-rebase
+#  url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
+#  sha256: {{ sha256 }}{% set data = load_npm() %}
+
+build:
+  number: 6
+  script:
+    - tgzfile=$(npm pack)
+    - npm install -g $tgzfile
+    # install activate scripts
+    - mkdir -p "$PREFIX"/etc/conda/{de,}activate.d/
+    - cp conda-recipe/mountainlab_activate.sh "$PREFIX"/etc/conda/activate.d/
+    - cp conda-recipe/mountainlab_deactivate.sh "$PREFIX"/etc/conda/deactivate.d/
+    # set up config directories
+    - mkdir -p "$PREFIX"/etc/mountainlab/{packages,database}
+    - touch "$PREFIX"/etc/mountainlab/{packages,database}/.conda_keep
+
+requirements:
+  build:
+    - nodejs
+  run:
+    - nodejs
+
+test:
+  commands:
+    - npm list -g mountainlab-js
+    - ml-config
+    - ml-list-processors
+  requires:
+    - nodejs
+
+about:
+  home: https://github.com/flatironinstitute/mountainlab-js
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+
