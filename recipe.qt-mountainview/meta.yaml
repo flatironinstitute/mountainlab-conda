@@ -1,0 +1,37 @@
+# conda-build packaging config for qt-mountainview
+# conda packaging maintainer: Tom Davidson (tjd@alum.mit.edu)
+
+package:
+  name: qt-mountainview
+  version: "0.1.3"
+
+source:
+  git_url: https://github.com/flatironinstitute/qt-mountainview
+  git_rev: master
+
+requirements:
+  build:
+    - mountainlab-js  # provides install locations
+    - qt {{ qt }}     # see ./conda_build_config.yaml for variants specification
+  run:
+    - mountainlab-js
+    - qt              # ./conda_build_config.yaml pins run & build Qtversions
+
+build:
+  number: 2
+  script:
+    - '[ -d "${ML_CONDA_PACKAGES_DIR}" ]' # (set in mountainlab_activate.sh, a build requirement)
+    - nproc=$(sysctl -n hw.ncpu) # [osx]
+    - nproc=$(nproc) # [linux]
+    - qmake -r && make -j${nproc} && make install # don't need CONFIG+=standalone, conda handles binary relocation! (linux + mac)
+    - cp packages/mv/bin/mv.mp "$ML_CONDA_PACKAGES_DIR"
+    - cp bin/qt-mountainview "${PREFIX}"/bin
+
+about:
+  home: https://github.com/flatironinstitute/qt-mountainview
+  license: Apache 2.0
+  summary: Visualization of spike sorting experiments to be used as a plugin package to mountainlab-js
+
+extra:
+  recipe-maintainers:
+    - tjd2002
