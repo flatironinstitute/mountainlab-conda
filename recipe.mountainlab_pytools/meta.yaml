@@ -1,0 +1,51 @@
+{% set name = "mountainlab_pytools" %}
+{% set version = "0.2.6" %}
+{% set file_ext = "tar.gz" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "b1e1b10ab9b2037ed76b6d63756c909bee9a9f2958744d938c462e9a8822fcd0" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  fn: '{{ name }}-{{ version }}.{{ file_ext }}'
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
+  '{{ hash_type }}': '{{ hash_value }}'
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+    - requests
+    - numpy
+    - numpydoc
+  run:
+    - python
+    - requests
+    - numpy
+    - numpydoc
+
+test:
+  imports:
+    - mountainlab_pytools
+    - mountainlab_pytools.mdaio
+    - mountainlab_pytools.mlproc
+    - mountainlab_pytools.processormanager
+
+about:
+  home: https://github.com/magland/mountainlab_pytools
+  license: Apache Software
+  license_family: APACHE
+  license_file: ''
+  summary: Tools for using MountainLab with python
+  description: ''
+  doc_url: ''
+  dev_url: ''
+
+extra:
+  recipe-maintainers: ''
