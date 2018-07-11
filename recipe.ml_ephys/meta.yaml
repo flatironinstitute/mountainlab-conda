@@ -1,0 +1,63 @@
+{% set name = "ml_ephys" %}
+{% set version = "0.0.1" %}
+{% set file_ext = "tar.gz" %}
+{% set hash_type = "sha256" %}
+{% set hash_value = "8260cf7230bfdb9dbebb798a6478ed5cec73162dac61a0bec98486b9cfd3fe36" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  fn: '{{ name }}-{{ version }}.{{ file_ext }}'
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
+  '{{ hash_type }}': '{{ hash_value }}'
+
+build:
+  number: 1
+  script:
+    - python setup.py install --single-version-externally-managed --record=record.txt
+    - ln -sf $SP_DIR/ml_ephys $ML_CONDA_PACKAGES_DIR # link mountainlab package
+    
+requirements:
+  host:
+    - mountainlab-js
+    - python
+    - setuptools
+    - mountainlab_pytools
+    - deepdish
+    - scipy
+    - numpy
+    - numpydoc
+    - h5py
+  run:
+    - mountainlab-js
+    - python
+    - mountainlab_pytools
+    - deepdish
+    - scipy
+    - numpy
+    - numpydoc
+    - h5py
+
+test:
+  imports:
+    - ml_ephys
+    - ml_ephys.basic
+    - ml_ephys.preprocessing
+    - ml_ephys.synthesis
+    - ml_ephys.validation
+
+about:
+  home: https://github.com/magland/ml_ephys
+  license: Apache Software
+  license_family: APACHE
+  license_file: ''
+  summary: ephys tools for MountainLab
+  description: "ml_ephys\n\nElectrophysiology tools\nMountainLab processor library\n\nInstallation:\n* clone this repository into .mountainlab/packages/\n* Install the required python packages via:\n\n\
+    cd ml_ephys\npip3 install --upgrade -r requirements.txt\n\n\n"
+  doc_url: ''
+  dev_url: ''
+
+extra:
+  recipe-maintainers: ''
