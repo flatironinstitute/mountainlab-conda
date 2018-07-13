@@ -1,0 +1,46 @@
+# conda-build packaging config for qt-mountainview
+# conda packaging maintainer: Tom Davidson (tjd@alum.mit.edu)
+
+# TODO:
+# -pin llvm-openmp build/run?
+# -fftw in build? pin build/run?
+# -open issue for ml-spec to return non-zero when processor not found
+
+package:
+  name: ml_ms3
+  version: "0.0.1"
+
+source:
+  git_url: https://github.com/flatironinstitute/mountainsort
+  git_rev: master
+
+requirements:
+  build:
+    - clangxx_osx-64
+    - llvm-openmp     # installed adjacent to clang4, must be in same env
+  host:
+    - qt {{ qt }}     # see ./conda_build_config.yaml for Qt variants specification
+    - fftw            # libraries to be linked, must be in host and run?
+    - mountainlab-js  # provides install locations, must be in host
+  run:
+    - llvm-openmp     # required? build-only? maybe automatic with run_exports?
+    - fftw            # maybe automatic with run_exports?
+    - mountainlab-js  
+    - qt              
+
+build:
+  number: 1
+
+test:
+  commands:
+    - ml-list-processors
+    - ml-spec ms3.isolation_metrics | grep -q -v "Processor not found"
+    
+about:
+  home: https://github.com/flatironinstitute/mountainsort
+  license: Apache 2.0
+  summary: Legacy (v3) mountainsort processor for mountainlab-js
+
+extra:
+  recipe-maintainers:
+    - tjd2002
