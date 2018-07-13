@@ -1,0 +1,40 @@
+{% set name = "ephys-viz" %}
+{% set repo_owner = "flatironinstitute" %}
+{% set version = "0.4.2" %}
+#{% set sha256 = "4b4ab9845dba0e6a6fda172d69aff6da72c3e429dc1f3d30fa0935d315f40cb6" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/{{ repo_owner }}/{{ name }}
+  git_rev: master
+#  url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
+#  sha256: {{ sha256 }}{% set data = load_npm() %}
+
+build:
+  number: 0
+  script:
+    - tgzfile=$(npm pack)
+    - npm install -g $tgzfile
+
+requirements:
+  build:
+    - nodejs
+  run:
+    - nodejs
+
+test:
+  commands:
+    - npm list -g ephys-viz
+    - which ev-timeseries
+  requires:
+    - nodejs
+
+about:
+  home: https://github.com/flatironinstitute/mountainlab-js
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+
