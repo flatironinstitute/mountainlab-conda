@@ -1,5 +1,6 @@
 qt:
-# - 5.6
+# ('xc-avoidance'  not available in 5.6 -> can't use conda compilers -> can't build with openmp)
+ - 5.6 # [not osx]
  - 5.9
 pin_run_as_build:
   qt: x.x

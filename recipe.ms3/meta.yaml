@@ -2,7 +2,8 @@
 # conda packaging maintainer: Tom Davidson (tjd@alum.mit.edu)
 
 # TODO:
-# -pin llvm-openmp build/run?
+# separate build script for linux
+#  -pin llvm-openmp build/run?
 # -fftw in build? pin build/run?
 # -open issue for ml-spec to return non-zero when processor not found
 
@@ -17,7 +18,7 @@ source:
 requirements:
   build:
     - clangxx_osx-64
-    - llvm-openmp     # installed adjacent to clang4, must be in same env
+    - llvm-openmp     # installs in clang4 directories, must be in 'build'
   host:
     - qt {{ qt }}     # see ./conda_build_config.yaml for Qt variants specification
     - fftw            # libraries to be linked, must be in host and run?
@@ -30,6 +31,29 @@ requirements:
 
 build:
   number: 1
+  script:
+    - set -euxo pipefail
+    - '[ -d "${ML_CONDA_PACKAGES_DIR}" ]' # (set in mountainlab_activate.sh, a host requirement)
+
+    # All of this business necessary to use the conda-provided clang on, which is openmp capable, 
+    # on mac. See: https://github.com/ContinuumIO/anaconda-issues/issues/9745
+
+    # Conda Qt provides a special utility to hide Xcode compile tools from qmake
+    - export XC_AVOIDANCE_PATH_QT="${PREFIX}"/bin/xc-avoidance/ # [osx]
+    - '[ -d "${XC_AVOIDANCE_PATH_QT}" ]' # [osx]
+    - export PATH=$XC_AVOIDANCE_PATH_QT:$PATH # [osx]
+
+    # XCode >= 9.3 ships MacOSSDK that is incompatible with the conda Linker, get an older one if needed like so:
+    #  wget https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.9.sdk.tar.xz
+    #  tar xf MacOSX10.9.sdk.tar.xz
+    #  sudo mv MacOSX10.9.sdk.tar.xz /opt/
+    - if [ -d /opt/MacOSX10.9.sdk ] ; then export CONDA_BUILD_SYSROOT=/opt/MacOSX10.9.sdk ; echo Using MacOSSDK at "${CONDA_BUILD_SYSROOT}" ; fi # [osx]
+
+    # Include host env /include to pick up fftw. -=App_bundle could go in ms3.pro instead
+    - qmake INCLUDEPATH+=$PREFIX/include CONFIG-=app_bundle
+    - make -j${CPU_COUNT} sub-packages-ms3-ms3-pro 
+    - find packages/ms3 | sort
+    - cp packages/ms3/bin/ms3.mp "$ML_CONDA_PACKAGES_DIR"
 
 test:
   commands:
