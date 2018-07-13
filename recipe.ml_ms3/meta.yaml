@@ -17,14 +17,18 @@ source:
 
 requirements:
   build:
-    - clangxx_osx-64
-    - llvm-openmp     # installs in clang4 directories, must be in 'build'
+    # openmp installs in compiler directories (at least on mac) so must be in 'build' env
+    - gxx_linux-64    # [linux]
+    - intel-openmp    # [linux]
+    - clangxx_osx-64  # [osx]
+    - llvm-openmp     # [osx] 
   host:
     - qt {{ qt }}     # see ./conda_build_config.yaml for Qt variants specification
     - fftw            # libraries to be linked, must be in host and run?
     - mountainlab-js  # provides install locations, must be in host
   run:
-    - llvm-openmp     # required? build-only? maybe automatic with run_exports?
+    - intel-openmp    # [linux]
+    - llvm-openmp     # [osx]
     - fftw            # maybe automatic with run_exports?
     - mountainlab-js  
     - qt              
