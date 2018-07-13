@@ -19,10 +19,10 @@ build:
     - python setup.py install --single-version-externally-managed --record=record.txt
     # link python package to mountainlab packages dir so processors will be discovered
     - ln -sf $SP_DIR/{{ name }} $ML_CONDA_PACKAGES_DIR
-    
+
 requirements:
   host:
-    - mountainlab-js
+    - mountainlab
     - python
     - setuptools
     - pybind11
@@ -30,17 +30,17 @@ requirements:
     - numpy
     - mountainlab_pytools
     - h5py
-#    - numpydoc (not in PyPI package - oversight?)
+#   - numpydoc (not in PyPI package - oversight?)
 
   run:
-    - mountainlab-js
+    - mountainlab
     - python
     - pybind11
     - isosplit5
     - numpy
     - mountainlab_pytools
     - h5py
-#    - numpydoc (not in PyPI package - oversight?)
+#   - numpydoc (not in PyPI package - oversight?)
     
 test:
   imports:

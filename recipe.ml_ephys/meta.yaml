@@ -14,7 +14,7 @@ source:
   '{{ hash_type }}': '{{ hash_value }}'
 
 build:
-  number: 2
+  number: 3
   script:
     - python setup.py install --single-version-externally-managed --record=record.txt
     # link python package to mountainlab packages dir so processors will be discovered
@@ -22,7 +22,7 @@ build:
     
 requirements:
   host:
-    - mountainlab-js
+    - mountainlab
     - python
     - setuptools
     - mountainlab_pytools
@@ -32,7 +32,7 @@ requirements:
     - numpydoc
     - h5py
   run:
-    - mountainlab-js
+    - mountainlab
     - python
     - mountainlab_pytools
     - deepdish

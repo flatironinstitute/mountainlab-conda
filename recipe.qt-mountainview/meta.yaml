@@ -11,14 +11,14 @@ source:
 
 requirements:
   build:
-    - mountainlab-js  # provides install locations
+    - mountainlab  # provides install locations
     - qt {{ qt }}     # see ./conda_build_config.yaml for variants specification
   run:
-    - mountainlab-js
+    - mountainlab
     - qt              # ./conda_build_config.yaml pins run & build Qtversions
 
 build:
-  number: 2
+  number: 3
   script:
     - '[ -d "${ML_CONDA_PACKAGES_DIR}" ]' # (set in mountainlab_activate.sh, a build requirement)
     - nproc=$(sysctl -n hw.ncpu) # [osx]
@@ -30,7 +30,7 @@ build:
 about:
   home: https://github.com/flatironinstitute/qt-mountainview
   license: Apache 2.0
-  summary: Visualization of spike sorting experiments to be used as a plugin package to mountainlab-js
+  summary: Visualization of spike sorting experiments to be used as a plugin package to mountainlab
 
 extra:
   recipe-maintainers:

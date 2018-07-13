@@ -1,5 +1,5 @@
 #!/bin/bash
-#echo "=== [ mountainlab-js deactivation ] ==========================================="
+#echo "=== [ mountainlab deactivation ] ==========================================="
 #echo ":"
 
 # if we set confdir on activation, and it hasn't changed, unset it.

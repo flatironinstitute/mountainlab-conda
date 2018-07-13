@@ -1,4 +1,4 @@
-#echo "=== [ mountainlab-js activate script ] ======================================="
+#echo "=== [ mountainlab activate script ] ======================================="
 #echo ":"
 
 # These dirs are created on install (see conda-recipe/meta.yaml)

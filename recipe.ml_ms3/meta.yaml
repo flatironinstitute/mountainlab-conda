@@ -25,16 +25,16 @@ requirements:
   host:
     - qt {{ qt }}     # see ./conda_build_config.yaml for Qt variants specification
     - fftw            # libraries to be linked, must be in host and run?
-    - mountainlab-js  # provides install locations, must be in host
+    - mountainlab  # provides install locations, must be in host
   run:
     - intel-openmp    # [linux]
     - llvm-openmp     # [osx]
     - fftw            # maybe automatic with run_exports?
-    - mountainlab-js  
+    - mountainlab  
     - qt              
 
 build:
-  number: 1
+  number: 2
   script:
     - set -euxo pipefail
     - '[ -d "${ML_CONDA_PACKAGES_DIR}" ]' # (set in mountainlab_activate.sh, a host requirement)
@@ -67,7 +67,7 @@ test:
 about:
   home: https://github.com/flatironinstitute/mountainsort
   license: Apache 2.0
-  summary: Legacy (v3) mountainsort processor for mountainlab-js
+  summary: Legacy (v3) mountainsort processor for mountainlab
 
 extra:
   recipe-maintainers:
