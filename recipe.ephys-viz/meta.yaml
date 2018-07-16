@@ -1,6 +1,6 @@
 {% set name = "ephys-viz" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.4.2" %}
+{% set version = "0.6.2" %}
 #{% set sha256 = "4b4ab9845dba0e6a6fda172d69aff6da72c3e429dc1f3d30fa0935d315f40cb6" %}
 
 package:
@@ -8,10 +8,9 @@ package:
   version: {{ version }}
 
 source:
-  git_url: https://github.com/{{ repo_owner }}/{{ name }}
-  git_rev: master
-#  url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
-#  sha256: {{ sha256 }}{% set data = load_npm() %}
+#  git_url: https://github.com/{{ repo_owner }}/{{ name }}
+#  git_rev: master
+  url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
 
 build:
   number: 0
