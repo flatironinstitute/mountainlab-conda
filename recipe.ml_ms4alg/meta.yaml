@@ -1,8 +1,8 @@
 {% set name = "ml_ms4alg" %}
-{% set version = "0.1.0" %}
+{% set version = "0.1.2" %}
 {% set file_ext = "tar.gz" %}
-{% set hash_type = "sha256" %}
-{% set hash_value = "36140e51cafa1f3d49d841de9aee79684572d5b2a36d09bbafd10fd6625db4ed" %}
+#{% set hash_type = "sha256" %}
+#{% set hash_value = "36140e51cafa1f3d49d841de9aee79684572d5b2a36d09bbafd10fd6625db4ed" %}
 
 package:
   name: '{{ name|lower }}'
@@ -11,7 +11,7 @@ package:
 source:
   fn: '{{ name }}-{{ version }}.{{ file_ext }}'
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
-  '{{ hash_type }}': '{{ hash_value }}'
+ # '{{ hash_type }}': '{{ hash_value }}'
 
 build:
   number: 3
