@@ -3,33 +3,32 @@
 {% set repo_name = "mountainlab-js" %}
 {% set repo_owner = "flatironinstitute" %}
 {% set version = "0.8.1" %}
-#{% set sha256 = "4b4ab9845dba0e6a6fda172d69aff6da72c3e429dc1f3d30fa0935d315f40cb6" %}
 
 package:
   name: {{ pkg_name|lower }}
   version: {{ version }}
 
 source:
-#  git_url: https://github.com/{{ repo_owner }}/{{ repo_name }}
-#  git_rev: conda-build-rebase
    url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/v{{ version }}.tar.gz
-#  sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 2
   script:
+    - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
     - npm install -g $tgzfile
+
     # install activate scripts
     - mkdir -p "$PREFIX"/etc/conda/{de,}activate.d/
     - cp "${RECIPE_DIR}"/mountainlab_activate.sh "$PREFIX"/etc/conda/activate.d/
     - cp "${RECIPE_DIR}"/mountainlab_deactivate.sh "$PREFIX"/etc/conda/deactivate.d/
-    # set up config directories
+
+    # set up mountainlab directories
     - mkdir -p "$PREFIX"/etc/mountainlab/{packages,database}
-    - touch "$PREFIX"/etc/mountainlab/{packages,database}/.conda_keep
+    - touch "$PREFIX"/etc/mountainlab/{packages,database}/.conda_keep # conda ignores empty directories
 
 requirements:
-  build:
+  host:
     - nodejs
   run:
     - nodejs

@@ -1,0 +1,43 @@
+# (Skip Qt 5.6 on MacOS because conda's 'xc-avoidance' scripts are not available:
+#  -> can't use conda compilers -> can't build with openmp)
+qt:
+ - 5.9
+ - 5.6 # [not osx]
+
+pin_run_as_build:
+  qt: x.x
+
+# Record that this conda_build_config file has been included
+# Add the following line to your build script:
+#  - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
+#
+BUILT_FROM_TOPDIR:
+  - 1
+
+# All of this business below is necessary to use the conda-provided clang, which is openmp capable, 
+# **on a mac** (with/without Qt). See: https://github.com/ContinuumIO/anaconda-issues/issues/9745
+
+# XCode >= 9.3 ships MacOSSDK that is incompatible with the conda Linker, get an older one if needed like so:
+#  wget https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.11.sdk.tar.xz
+#  tar xf MacOSX10.11.sdk.tar.xz
+# And install it to a known location
+#  sudo mv MacOSX10.11.sdk /opt/
+# Then, in meta.yaml, replace compiler requirements (clang, gcc, etc) with:
+#
+# build:
+#  - {{ compiler('cxx') }}
+#
+CONDA_BUILD_SYSROOT:              # [osx]
+  - /opt/MacOSX10.11.sdk          # [osx]
+
+# Conda Qt 5.9 provides a special utility to hide Xcode compile tools from qmake and
+# use conda-provided tools instead. To use it, include these lines in your build script:
+#  
+#  - test -d "${XC_AVOIDANCE_PATH_QT}" # [osx]
+#  - export PATH=$XC_AVOIDANCE_PATH_QT:$PATH # [osx]
+#
+XC_AVOIDANCE_PATH_QT:             # [osx]
+  - "${PREFIX}/bin/xc-avoidance/" # [osx]
+
+
+

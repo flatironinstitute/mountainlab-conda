@@ -1,0 +1,4 @@
+extra:
+  recipe-url: "https://github.com/flatironinstitute/mountainlab-conda"
+  recipe-maintainers: 'tjd2002'
+

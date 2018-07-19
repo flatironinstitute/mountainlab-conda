@@ -1,8 +1,6 @@
 {% set name = "isosplit5" %}
 {% set version = "0.1.3" %}
 {% set file_ext = "tar.gz" %}
-{% set hash_type = "sha256" %}
-{% set hash_value = "ec2f47933859b5821d3031e1ab7d76ea613f8ccb192d8812cb3f4f9320ccfc19" %}
 
 package:
   name: '{{ name|lower }}'
@@ -11,22 +9,24 @@ package:
 source:
   fn: '{{ name }}-{{ version }}.{{ file_ext }}'
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
-  '{{ hash_type }}': '{{ hash_value }}'
 
 build:
-  number: 0
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  number: 4
+  script:
+    - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
+    - python -m pip install --no-deps --ignore-installed .
 
 requirements:
+  build:
+    - {{ compiler('cxx') }}
   host:
     - python
-    - setuptools
-    - numpy
+    - pip
     - pybind11 >=2.2
+    - numpy
   run:
     - python
     - numpy
-    - pybind11 >=2.2
 
 test:
   imports:
@@ -41,6 +41,3 @@ about:
   description: ''
   doc_url: ''
   dev_url: ''
-
-extra:
-  recipe-maintainers: ''

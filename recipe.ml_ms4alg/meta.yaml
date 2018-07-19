@@ -1,8 +1,6 @@
 {% set name = "ml_ms4alg" %}
 {% set version = "0.1.2" %}
 {% set file_ext = "tar.gz" %}
-#{% set hash_type = "sha256" %}
-#{% set hash_value = "36140e51cafa1f3d49d841de9aee79684572d5b2a36d09bbafd10fd6625db4ed" %}
 
 package:
   name: '{{ name|lower }}'
@@ -11,51 +9,49 @@ package:
 source:
   fn: '{{ name }}-{{ version }}.{{ file_ext }}'
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
- # '{{ hash_type }}': '{{ hash_value }}'
 
 build:
-  number: 3
+  number: 5
   script:
-    - python setup.py install --single-version-externally-managed --record=record.txt
+    - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
+    - python -m pip install --no-deps --ignore-installed .
     # link python package to mountainlab packages dir so processors will be discovered
     - ln -sf $SP_DIR/{{ name }} $ML_CONDA_PACKAGES_DIR
 
 requirements:
+  build:
+    - {{ compiler('cxx') }}
   host:
-    - mountainlab
     - python
-    - setuptools
+    - pip
     - pybind11
     - isosplit5
     - numpy
+    - mountainlab
     - mountainlab_pytools
     - h5py
-#   - numpydoc (not in PyPI package - oversight?)
 
   run:
-    - mountainlab
     - python
-    - pybind11
-    - isosplit5
     - numpy
-    - mountainlab_pytools
     - h5py
-#   - numpydoc (not in PyPI package - oversight?)
+    - mountainlab
+    - mountainlab_pytools
+    - isosplit5
     
 test:
   imports:
     - ml_ms4alg
+  commands:
+    - ml-list-processors
+    - ml-spec ms4alg.sort | grep -q -v "Processor not found"
 
 about:
   home: https://github.com/magland/ml_ms4alg
   license: Apache Software
   license_family: APACHE
   license_file: ''
-  summary: Mountainsort v4 for MountainLab
-  description: "ml_ms4alg\n\nMountainSort v4\nMountainLab processor library\n\nInstallation:\n* clone this repository into .mountainlab/packages/\n* Install the required python packages via:\n\ncd ml_ms4alg\n\
-    pip3 install --upgrade -r requirements.txt\n\n\n"
+  summary: Mountainsort v4 processor plugin for MountainLab
+  description: "ml_ms4alg\n\nMountainSort v4\nMountainLab processor library"
   doc_url: ''
   dev_url: ''
-
-extra:
-  recipe-maintainers: 'tjd2002'

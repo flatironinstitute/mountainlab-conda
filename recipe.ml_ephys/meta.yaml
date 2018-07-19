@@ -1,8 +1,6 @@
 {% set name = "ml_ephys" %}
 {% set version = "0.0.1" %}
 {% set file_ext = "tar.gz" %}
-{% set hash_type = "sha256" %}
-{% set hash_value = "8260cf7230bfdb9dbebb798a6478ed5cec73162dac61a0bec98486b9cfd3fe36" %}
 
 package:
   name: '{{ name|lower }}'
@@ -11,21 +9,21 @@ package:
 source:
   fn: '{{ name }}-{{ version }}.{{ file_ext }}'
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ file_ext }}
-  '{{ hash_type }}': '{{ hash_value }}'
 
 build:
-  number: 3
+  number: 4
   script:
-    - python setup.py install --single-version-externally-managed --record=record.txt
+    - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
+    - python -m pip install --no-deps --ignore-installed .
     # link python package to mountainlab packages dir so processors will be discovered
     - ln -sf $SP_DIR/{{ name }} $ML_CONDA_PACKAGES_DIR
     
 requirements:
   host:
-    - mountainlab
     - python
-    - setuptools
+    - pip
     - mountainlab_pytools
+    - mountainlab
     - deepdish
     - scipy
     - numpy
@@ -55,10 +53,6 @@ about:
   license_family: APACHE
   license_file: ''
   summary: ephys tools for MountainLab
-  description: "ml_ephys\n\nElectrophysiology tools\nMountainLab processor library\n\nInstallation:\n* clone this repository into .mountainlab/packages/\n* Install the required python packages via:\n\n\
-    cd ml_ephys\npip3 install --upgrade -r requirements.txt\n\n\n"
+  description: "ml_ephys\n\nElectrophysiology tools\nMountainLab processor library"
   doc_url: ''
   dev_url: ''
-
-extra:
-  recipe-maintainers: ''

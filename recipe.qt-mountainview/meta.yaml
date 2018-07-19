@@ -1,5 +1,4 @@
 # conda-build packaging config for qt-mountainview
-# conda packaging maintainer: Tom Davidson (tjd@alum.mit.edu)
 
 package:
   name: qt-mountainview
@@ -11,27 +10,40 @@ source:
 
 requirements:
   build:
+    - {{ compiler('cxx') }}
+  host:
+    - qt {{ qt }}     # see ../conda_build_config.yaml for variants specification
     - mountainlab  # provides install locations
-    - qt {{ qt }}     # see ./conda_build_config.yaml for variants specification
   run:
+    - qt              # ../conda_build_config.yaml pins run & build Qt versions
     - mountainlab
-    - qt              # ./conda_build_config.yaml pins run & build Qtversions
 
 build:
-  number: 3
+  number: 5
   script:
-    - '[ -d "${ML_CONDA_PACKAGES_DIR}" ]' # (set in mountainlab_activate.sh, a build requirement)
-    - nproc=$(sysctl -n hw.ncpu) # [osx]
-    - nproc=$(nproc) # [linux]
-    - qmake -r && make -j${nproc} && make install # don't need CONFIG+=standalone, conda handles binary relocation! (linux + mac)
+    - set -e -u - x -o pipefail
+    - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
+    - test -d "${ML_CONDA_PACKAGES_DIR}" # (set in mountainlab_activate.sh, a build requirement)
+
+    # These should both be set in mountainlab-conda/conda_build_config.yaml
+    - test -d "${CONDA_BUILD_SYSROOT}" # [osx]
+    - test -d "${XC_AVOIDANCE_PATH_QT}" # [osx]
+    - export PATH=$XC_AVOIDANCE_PATH_QT:$PATH # [osx]
+
+    - qmake -r  # don't need CONFIG+=standalone, conda handles binary relocation! (linux + mac)
+    - make -j${CPU_COUNT}
+    - make install
     - cp packages/mv/bin/mv.mp "$ML_CONDA_PACKAGES_DIR"
     - cp bin/qt-mountainview "${PREFIX}"/bin
+
+test:
+  commands:
+    - which qt-mountainview
+    - ml-list-processors
+    - ml-spec mv.create_multiscale_timeseries | grep -q -v "Processor not found"
+    
 
 about:
   home: https://github.com/flatironinstitute/qt-mountainview
   license: Apache 2.0
   summary: Visualization of spike sorting experiments to be used as a plugin package to mountainlab
-
-extra:
-  recipe-maintainers:
-    - tjd2002
