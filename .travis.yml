@@ -2,7 +2,7 @@
 
 os:
   - linux
-  - osx
+#  - osx
 
 # node_js:
 #   - "node"
@@ -28,8 +28,12 @@ install:
   - conda install ${CONDA_CHANNEL_ARGS} $conda_pkg
 
 script:
-  - npm list -g mountainlab;
-  - echo npm prefix -g = `npm prefix -g`;
-  - which ml-config;
-  - ml-config;
-  - ml-list-processors;
+  - conda activate ml-env
+  - conda list
+  - which -a npm
+  - echo PATH=$PATH
+  - npm list -g mountainlab
+  - echo npm prefix -g = `npm prefix -g`
+  - which ml-config
+  - ml-config
+  - ml-list-processors
