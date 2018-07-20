@@ -1,7 +1,6 @@
 {% set name = "isosplit5" %}
 {% set repo_name = "isosplit5_python" %}
 {% set repo_owner = "magland" %}
-{% set repo_version = "0.1.1" %}
 {% set version = "0.1.3" %}
 {% set file_ext = "tar.gz" %}
 
@@ -10,10 +9,10 @@ package:
   version: '{{ version }}'
 
 source:
-  url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/{{ repo_version }}.tar.gz
+  url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/{{ version }}.tar.gz
 
 build:
-  number: 5
+  number: 6
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - python -m pip install --no-deps --ignore-installed .
