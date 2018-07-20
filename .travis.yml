@@ -20,15 +20,15 @@ install:
   - source $HOME/miniconda/etc/profile.d/conda.sh
   - hash -r
   - conda config --set always_yes yes --set changeps1 no --set auto_update_conda no
-  - conda create -n mljs-env conda-build
+  - conda create -n ml-env conda-build
   - conda info -a
-  - conda activate mljs-env
+  - conda activate ml-env
   - conda build ${CONDA_CHANNEL_ARGS} ${CONDA_APPEND_ARGS} recipe.${PKG_NAME}
   - conda_pkg=$(conda build ${CONDA_CHANNEL_ARGS} ${CONDA_APPEND_ARGS} recipe.${PKG_NAME} --output)
   - conda install ${CONDA_CHANNEL_ARGS} $conda_pkg
 
 script:
-  - npm list -g mountainlab-js;
+  - npm list -g mountainlab;
   - echo npm prefix -g = `npm prefix -g`;
   - which ml-config;
   - ml-config;
