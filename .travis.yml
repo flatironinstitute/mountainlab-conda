@@ -24,7 +24,7 @@ install:
   - conda info -a
 # - conda activate ml-env
   - conda activate
-  - conda install build
+  - conda install conda-build
   - conda build ${CONDA_CHANNEL_ARGS} ${CONDA_APPEND_ARGS} recipe.${PKG_NAME}
   - conda_pkg=$(conda build ${CONDA_CHANNEL_ARGS} ${CONDA_APPEND_ARGS} recipe.${PKG_NAME} --output)
   - echo conda_pkg = $conda_pkg
