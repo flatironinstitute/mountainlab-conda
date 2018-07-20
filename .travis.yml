@@ -32,7 +32,6 @@ install:
   - conda install ${CONDA_CHANNEL_ARGS} ${PKG_NAME}
 
 script:
-  - conda activate ml-env
   - conda list
   - which -a npm
   - echo PATH=$PATH
