@@ -47,7 +47,7 @@ build:
 test:
   commands:
     - ml-list-processors
-    - ml-spec ms3.isolation_metrics | grep -q -v "Processor not found"
+    - ml-spec ms3.isolation_metrics
     
 about:
   home: https://github.com/flatironinstitute/mountainsort

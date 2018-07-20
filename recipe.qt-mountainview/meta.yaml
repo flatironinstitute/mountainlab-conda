@@ -40,7 +40,7 @@ test:
   commands:
     - which qt-mountainview
     - ml-list-processors
-    - ml-spec mv.create_multiscale_timeseries | grep -q -v "Processor not found"
+    - ml-spec mv.create_multiscale_timeseries
     
 
 about:

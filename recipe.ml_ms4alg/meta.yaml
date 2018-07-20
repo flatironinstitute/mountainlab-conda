@@ -44,7 +44,7 @@ test:
     - ml_ms4alg
   commands:
     - ml-list-processors
-    - ml-spec ms4alg.sort | grep -q -v "Processor not found"
+    - ml-spec ms4alg.sort
 
 about:
   home: https://github.com/magland/ml_ms4alg
