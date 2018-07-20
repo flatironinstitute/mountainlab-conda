@@ -25,7 +25,7 @@ install:
   - conda activate ml-env
   - conda build ${CONDA_CHANNEL_ARGS} ${CONDA_APPEND_ARGS} recipe.${PKG_NAME}
   - conda_pkg=$(conda build ${CONDA_CHANNEL_ARGS} ${CONDA_APPEND_ARGS} recipe.${PKG_NAME} --output)
-  - conda install ${CONDA_CHANNEL_ARGS} $conda_pkg
+  - conda install ${CONDA_CHANNEL_ARGS} ${PKG_NAME}
 
 script:
   - conda activate ml-env
