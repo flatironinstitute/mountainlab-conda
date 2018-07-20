@@ -1,11 +1,11 @@
-language: node_js
+# language: node_js # we'll provide with conda
 
 os:
   - linux
   - osx
 
-node_js:
-  - "node"
+# node_js:
+#   - "node"
 
 env:
   - PKG_NAME=mountainlab  CONDA_CHANNEL_ARGS="-c local -c defaults -c conda-forge" CONDA_APPEND_ARGS="--append-file=recipe_append.yaml"
