@@ -12,7 +12,7 @@ source:
    url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/v{{ version }}.tar.gz
 
 build:
-  number: 0
+  number: 1 # add coreutils on Mac
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
@@ -32,6 +32,7 @@ requirements:
     - nodejs
   run:
     - nodejs
+    - coreutils [ osx ]
 
 test:
   commands:
