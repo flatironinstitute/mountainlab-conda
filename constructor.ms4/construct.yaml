@@ -1,0 +1,15 @@
+name: Mountainsort
+version: 4.1.0-1
+
+install_in_dependency_order: True
+
+channels:
+  - http://conda.anaconda.org/flatiron/
+  - http://repo.anaconda.com/pkgs/main/
+
+specs:
+  - python 3.6*
+  - conda
+  - mountainsort 4.1.0
+#  - ephys-viz
+#  - qt-mountainview
