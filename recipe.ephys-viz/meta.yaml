@@ -1,6 +1,6 @@
 {% set name = "ephys-viz" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.6.4" %}
+{% set version = "0.6.10" %}
 
 package:
   name: {{ name|lower }}
@@ -15,12 +15,19 @@ build:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
     - npm install -g $tgzfile
+    - python -m pip install vdom jp_proxy_widget
+    - python -m pip install --no-deps --ignore-installed jp_ephys_viz
 
 requirements:
   build:
+    - python
+    - pip
     - nodejs
   run:
+    - python
     - nodejs
+    - ipython
+    - ipywidgets
 
 test:
   commands:

@@ -2,7 +2,7 @@
 {% set pkg_name = "mountainlab" %}
 {% set repo_name = "mountainlab-js" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.13.0" %}
+{% set version = "0.13.10" %}
 
 package:
   name: {{ pkg_name|lower }}

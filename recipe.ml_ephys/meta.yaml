@@ -1,5 +1,5 @@
 {% set name = "ml_ephys" %}
-{% set version = "0.2.0" %}
+{% set version = "0.2.1" %}
 {% set repo_owner = "magland" %}
 
 package:
