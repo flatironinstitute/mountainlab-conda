@@ -1,0 +1,41 @@
+{
+  "name": "mountainlab_ephys",
+  "version": "0.1.1",
+  "description": "",
+  "scripts": {},
+  "author": "Jeremy Magland",
+  "license": "Apache-2.0",
+  "conda":{
+  	"build_number":0,
+  	"requirements":[
+  		{
+  			"name":"mountainlab",
+  			"version":"0.13.14"
+  		},
+  		{
+  			"name":"mountainlab_pytools",
+  			"version":"0.6.4"
+  		},
+  		{
+  			"name":"ml_ephys",
+  			"version":"0.2.2"
+  		},
+  		{
+  			"name":"ml_ms3",
+  			"version":"0.0.2"
+  		},
+  		{
+  			"name":"ml_ms4alg",
+  			"version":"0.1.4"
+  		},
+  		{
+  			"name":"ml_pyms",
+  			"version":"0.0.1"
+  		},
+  		{
+  			"name":"ephys-viz",
+  			"version":"0.6.11"
+  		}
+  	]
+  }
+}
