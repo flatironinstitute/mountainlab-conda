@@ -7,7 +7,7 @@
 
 package:
   name: {{ name }}
-  version: "0.0.1"
+  version: "0.0.2"
 
 source:
   git_url: https://github.com/{{ repo_owner }}/{{ repo_name}}
@@ -46,7 +46,9 @@ build:
     - cd packages
     - python -m pip install --no-deps --ignore-installed .
     # link python package to mountainlab packages dir so processors will be discovered
-    - ln -sf $SP_DIR/pyms $ML_CONDA_PACKAGES_DIR/ml_pyms
+    # Note: need to give ml-config the right CONDA_PREFIX value
+    - echo ln -sf $SP_DIR/pyms `CONDA_PREFIX=$PREFIX ml-config package_directory`/{{ name }}
+    - ln -sf $SP_DIR/pyms `CONDA_PREFIX=$PREFIX ml-config package_directory`/{{ name }}
 
 test:
   commands:

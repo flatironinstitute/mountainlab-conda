@@ -2,7 +2,7 @@
 {% set pkg_name = "mountainlab" %}
 {% set repo_name = "mountainlab-js" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.13.10" %}
+{% set version = "0.13.13" %}
 
 package:
   name: {{ pkg_name|lower }}
@@ -17,11 +17,6 @@ build:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
     - npm install -g $tgzfile
-
-    # install activate scripts
-    - mkdir -p "$PREFIX"/etc/conda/{de,}activate.d/
-    - cp "${RECIPE_DIR}"/mountainlab_activate.sh "$PREFIX"/etc/conda/activate.d/
-    - cp "${RECIPE_DIR}"/mountainlab_deactivate.sh "$PREFIX"/etc/conda/deactivate.d/
 
     # set up mountainlab directories
     - mkdir -p "$PREFIX"/etc/mountainlab/{packages,database}

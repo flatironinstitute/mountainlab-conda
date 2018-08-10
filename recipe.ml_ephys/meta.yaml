@@ -10,12 +10,14 @@ source:
   url: https://github.com/{{ repo_owner }}/{{ name }}/archive/{{ version }}.tar.gz
 
 build:
-  number: 0
+  number: 3
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - python -m pip install --no-deps --ignore-installed .
     # link python package to mountainlab packages dir so processors will be discovered
-    - ln -sf $SP_DIR/{{ name }} $ML_CONDA_PACKAGES_DIR
+    # Note: need to give ml-config the right CONDA_PREFIX value
+    - echo ln -sf $SP_DIR/{{ name }} `CONDA_PREFIX=$PREFIX ml-config package_directory`/{{ name }}
+    - ln -sf $SP_DIR/{{ name }} `CONDA_PREFIX=$PREFIX ml-config package_directory`/{{ name }}
     
 requirements:
   host:
@@ -45,6 +47,9 @@ test:
     - ml_ephys.preprocessing
     - ml_ephys.synthesis
     - ml_ephys.validation
+  commands:
+    - ml-list-processors
+    - ml-spec ephys.bandpass_filter
 
 about:
   home: https://github.com/magland/ml_ephys

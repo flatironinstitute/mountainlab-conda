@@ -1,6 +1,6 @@
 {% set name = "ml_ms4alg" %}
 {% set repo_owner = "magland" %}
-{% set version = "0.1.2" %}
+{% set version = "0.1.3" %}
 
 package:
   name: '{{ name|lower }}'
@@ -10,12 +10,14 @@ source:
   url: https://github.com/{{ repo_owner }}/{{ name }}/archive/{{ version }}.tar.gz
 
 build:
-  number: 6 
+  number: 1
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - python -m pip install --no-deps --ignore-installed .
     # link python package to mountainlab packages dir so processors will be discovered
-    - ln -sf $SP_DIR/{{ name }} $ML_CONDA_PACKAGES_DIR
+    # Note: need to give ml-config the right CONDA_PREFIX value
+    - echo ln -sf $SP_DIR/{{ name }} `CONDA_PREFIX=$PREFIX ml-config package_directory`/{{ name }}
+    - ln -sf $SP_DIR/{{ name }} `CONDA_PREFIX=$PREFIX ml-config package_directory`/{{ name }}
 
 requirements:
   build:
