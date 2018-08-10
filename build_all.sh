@@ -2,14 +2,9 @@
 set -e -u -x -o pipefail
 RECIPE_DIRS_ORDERED="\
 recipe.isosplit5 \
-recipe.mountainlab \
-recipe.mountainlab_pytools \
-recipe.ml_ephys \
-recipe.ml_ms4alg \
 recipe.ml_ms3 \
 recipe.ml_pyms \
 recipe.qt-mountainview \
-recipe.ephys-viz \
 recipe.mountainsort \
 "
 
