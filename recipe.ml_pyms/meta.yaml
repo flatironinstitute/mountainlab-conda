@@ -41,7 +41,6 @@ build:
   script:
     - set -e -u - x -o pipefail
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
-    - test -d "${ML_CONDA_PACKAGES_DIR}" # should be set by mountainlab's activate script
 
     - cd packages
     - python -m pip install --no-deps --ignore-installed .
