@@ -2,7 +2,7 @@
 {% set pkg_name = "mountainlab" %}
 {% set repo_name = "mountainlab-js" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.13.0" %}
+{% set version = "0.15.1" %}
 
 package:
   name: {{ pkg_name|lower }}
@@ -12,17 +12,12 @@ source:
    url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/v{{ version }}.tar.gz
 
 build:
-  number: 0
+  number: 1
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
     - npm install -g $tgzfile
-
-    # install activate scripts
-    - mkdir -p "$PREFIX"/etc/conda/{de,}activate.d/
-    - cp "${RECIPE_DIR}"/mountainlab_activate.sh "$PREFIX"/etc/conda/activate.d/
-    - cp "${RECIPE_DIR}"/mountainlab_deactivate.sh "$PREFIX"/etc/conda/deactivate.d/
-
+    
     # set up mountainlab directories
     - mkdir -p "$PREFIX"/etc/mountainlab/{packages,database}
     - touch "$PREFIX"/etc/mountainlab/{packages,database}/.conda_keep # conda ignores empty directories
@@ -39,6 +34,10 @@ test:
     - npm list -g mountainlab
     - ml-config
     - ml-list-processors
+    - ml-spec hello.world
+    - ml-spec hello.world -p
+    - ml-run-process --help
+    - ml-prv-locate --help
   requires:
     - nodejs
 
