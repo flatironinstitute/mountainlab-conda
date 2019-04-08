@@ -1,5 +1,5 @@
 {% set name = "ml_ephys" %}
-{% set version = "0.2.0" %}
+{% set version = "0.2.14" %}
 {% set repo_owner = "magland" %}
 
 package:
@@ -14,23 +14,25 @@ build:
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - python -m pip install --no-deps --ignore-installed .
-    # link python package to mountainlab packages dir so processors will be discovered
-    - ln -sf $SP_DIR/{{ name }} $ML_CONDA_PACKAGES_DIR
+    # link python package to mountainlab packages dir so processors will be available
+    - ML_PACKAGE_DIR=`CONDA_PREFIX=$PREFIX ml-config package_directory`
+    - test -n "$ML_PACKAGE_DIR" # error if empty
+    - ln -sf $SP_DIR/{{ name }} $ML_PACKAGE_DIR/{{name}}
     
 requirements:
   host:
     - python
     - pip
-    - mountainlab_pytools
     - mountainlab
+    - mountainlab_pytools
     - deepdish
     - scipy
     - numpy
     - numpydoc
     - h5py
   run:
-    - mountainlab
     - python
+    - mountainlab
     - mountainlab_pytools
     - deepdish
     - scipy
@@ -39,6 +41,9 @@ requirements:
     - h5py
 
 test:
+  commands:
+    - ml-list-processors
+    - ml-spec ephys.bandpass_filter
   imports:
     - ml_ephys
     - ml_ephys.basic
