@@ -1,6 +1,6 @@
 {% set repo_owner = "magland" %}
 {% set name = "mountainlab_pytools" %}
-{% set version = "0.2.7" %}
+{% set version = "0.7.5" %}
 
 package:
   name: '{{ name|lower }}'
@@ -13,6 +13,11 @@ build:
   number: 0
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
+    # vdom + jp_proxy_widget are not available as conda packages, so we install pinned
+    # versions with pip, then manually add the requirements (as conda packages) below.
+    # conda-build > 3.17 sets PIP_NO_INDEX=True, but we actually want to go download
+    # these packages in this case. (Hacky--should conda-ize them.)
+    - PIP_NO_INDEX=False python -m pip install --no-deps --ignore-installed vdom==0.6 jp_proxy_widget==1.0.0
     - python -m pip install --no-deps --ignore-installed .
 
 requirements:
@@ -20,15 +25,16 @@ requirements:
     - mountainlab
     - python
     - pip
-    - requests
-    - numpy
-    - numpydoc
   run:
     - mountainlab
     - python
     - requests
     - numpy
     - numpydoc
+    - requests # req'd by jp_proxy_widget
+    - ipywidgets>=7.0.0 # req'd by jp_proxy_widget
+    - ipython # req'd by vdom
+    - jsonschema # req'd by vdom
 
 test:
   imports:
@@ -36,6 +42,8 @@ test:
     - mountainlab_pytools.mdaio
     - mountainlab_pytools.mlproc
     - mountainlab_pytools.processormanager
+    - vdom
+    - jp_proxy_widget
 
 about:
   home: https://github.com/magland/mountainlab_pytools
