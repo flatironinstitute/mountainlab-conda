@@ -1,17 +1,18 @@
 {% set name = "ml_pyms" %}
 {% set repo_name = "mountainsort" %}
-{% set repo_owner = "tjd2002" %}
+{% set repo_owner = "flatironinstitute" %}
+{% set version = "0.2.0" %}
 
 # TODO:
 # -rename source dir from pyms to ml_pyms? Currently a little hacky
 
 package:
   name: {{ name }}
-  version: "0.0.1"
+  version: {{ version }}
 
 source:
-  git_url: https://github.com/{{ repo_owner }}/{{ repo_name}}
-  git_rev: conda-build
+  url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/v{{ version }}.tar.gz
+
 
 requirements:
   build:
@@ -23,13 +24,13 @@ requirements:
     - pip
     - pybind11 >=2.2
     - fftw
-    - mountainlab     # provides install locations, must be in host
+    - mountainlab>=0.15     # provides install locations, must be in host
   run:
     - python
     - intel-openmp    # [linux]
     - llvm-openmp     # [osx]
     - fftw
-    - mountainlab
+    - mountainlab>=0.15
     - numpy
     - numpydoc
     - scipy
@@ -41,18 +42,20 @@ build:
   script:
     - set -e -u - x -o pipefail
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
-    - test -d "${ML_CONDA_PACKAGES_DIR}" # should be set by mountainlab's activate script
+    - ML_PACKAGE_DIR=`CONDA_PREFIX=$PREFIX ml-config package_directory`
+    - test -n "$ML_PACKAGE_DIR" # error if we can't find package directory
 
     - cd packages
     - python -m pip install --no-deps --ignore-installed .
     # link python package to mountainlab packages dir so processors will be discovered
-    - ln -sf $SP_DIR/pyms $ML_CONDA_PACKAGES_DIR/ml_pyms
+    - ln -sf $SP_DIR/pyms $ML_PACKAGE_DIR/ml_pyms
 
 test:
+  imports:
+    - pyms.basic.p_compute_templates
   commands:
     - ml-list-processors
     - ml-spec pyms.extract_clips
-    - python -c "from  pyms.basic.p_compute_templates import compute_templates_helper"
     
 about:
   home: https://github.com/flatironinstitute/mountainsort

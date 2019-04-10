@@ -1,13 +1,17 @@
+{% set name = "ml_ms3" %}
+{% set repo_name = "mountainsort" %}
+{% set repo_owner = "flatironinstitute" %}
+{% set version = "0.2.0" %}
+
 # TODO:
 # -pin openmp build/run?
 
 package:
-  name: ml_ms3
-  version: "0.0.1"
+  name: {{ name }}
+  version: {{ version }}
 
 source:
-  git_url: https://github.com/flatironinstitute/mountainsort
-  git_rev: master
+  url: https://github.com/{{ repo_owner }}/{{ repo_name }}/archive/v{{ version }}.tar.gz
 
 requirements:
   build:
@@ -17,20 +21,21 @@ requirements:
   host:
     - qt {{ qt }}     # see ./conda_build_config.yaml for Qt variants specification
     - fftw            # libraries to be linked, must be in host and run?
-    - mountainlab     # provides install locations, must be in host
+    - mountainlab>=0.15 # provides install locations, must be in host
   run:
     - intel-openmp    # [linux]
     - llvm-openmp     # [osx]
     - fftw
-    - mountainlab
+    - mountainlab>=0.15
     - qt
 
 build:
-  number: 6
+  number: 0
   script:
     - set -e -u - x -o pipefail
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
-    - test -d "${ML_CONDA_PACKAGES_DIR}" # should be set by mountainlab's activate script
+    - ML_PACKAGE_DIR=`CONDA_PREFIX=$PREFIX ml-config package_directory`
+    - test -n "$ML_PACKAGE_DIR" # error if we can't find package directory
 
     # These should both be set in mountainlab-conda/conda_build_config.yaml
     - test -d "${CONDA_BUILD_SYSROOT}" # [osx]
@@ -38,11 +43,11 @@ build:
     - export PATH=$XC_AVOIDANCE_PATH_QT:$PATH # [osx]
     
     # Include host env's /include to pick up fftw.
-    # CONFIG-=App_bundle should go in ms3.pro instead
-    - qmake INCLUDEPATH+=$PREFIX/include CONFIG-=app_bundle # [osx]
-    - qmake INCLUDEPATH+=$PREFIX/include # [not osx]
-    - make -j${CPU_COUNT} sub-packages-ms3-ms3-pro 
-    - cp packages/ms3/bin/ms3.mp "$ML_CONDA_PACKAGES_DIR"
+    - qmake INCLUDEPATH+=$PREFIX/include
+    - make -j${CPU_COUNT} sub-packages-ms3-ms3-pro
+
+    # Install in mountainlab packages directory
+    - cp packages/ms3/bin/ms3.mp "$ML_PACKAGE_DIR"
 
 test:
   commands:
