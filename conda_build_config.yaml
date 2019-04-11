@@ -2,10 +2,15 @@
 #  -> can't use conda compilers -> can't build with openmp)
 qt:
  - 5.9
- - 5.6 # [not osx]
+#- 5.6 # [not osx]
 
 pin_run_as_build:
   qt: x.x
+
+python:
+# - 3.5
+ - 3.6
+# - 3.7
 
 # Record that this conda_build_config file has been included
 # Add the following line to your build script:
