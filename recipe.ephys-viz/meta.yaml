@@ -1,6 +1,6 @@
 {% set name = "ephys-viz" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.6.4" %}
+{% set version = "0.7.3" %}
 
 package:
   name: {{ name|lower }}
@@ -10,24 +10,38 @@ source:
   url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
 
 build:
-  number: 2
+  number: 0
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
     - npm install -g $tgzfile
+    # vdom + jp_proxy_widget are not available as conda packages, so we install pinned
+    # versions with pip, then manually add the requirements (as conda packages) below.
+    # conda-build > 3.17 sets PIP_NO_INDEX=True, but we actually want to go download
+    # these packages in this case. (Hacky--should conda-ize them.)
+    - PIP_NO_INDEX=False python -m pip install --no-deps --ignore-installed vdom==0.6 jp_proxy_widget==1.0.0
+    # jp_ephys_viz is available on pypi, but we have the source right here, so let's use it
+    - python -m pip install --no-deps --ignore-installed ./jp_ephys_viz
 
 requirements:
   build:
     - nodejs
+    - python
+    - pip
   run:
     - nodejs
+    - python
+    - ipython    # needed by vdom
+    - jsonschema # needed by vdom
+    - ipywidgets>=7.0.0 # needed by jp_proxy_widgets
+    - requests   # needed by jp_proxy_widgets
 
 test:
+  imports:
+    - jp_ephys_viz
   commands:
     - npm list -g ephys-viz
     - which ev-timeseries
-  requires:
-    - nodejs
 
 about:
   home: https://github.com/flatironinstitute/mountainlab-js
