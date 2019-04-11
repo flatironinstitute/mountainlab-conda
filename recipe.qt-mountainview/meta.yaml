@@ -1,12 +1,14 @@
 # conda-build packaging config for qt-mountainview
+{% set name = "qt-mountainview" %}
+{% set repo_owner = "flatironinstitute" %}
+{% set version = "0.1.3" %}
 
 package:
-  name: qt-mountainview
-  version: "0.1.3"
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
 
 source:
-  git_url: https://github.com/flatironinstitute/qt-mountainview
-  git_rev: master
+  url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
 
 requirements:
   build:
@@ -16,15 +18,17 @@ requirements:
     - mountainlab  # provides install locations
   run:
     - qt              # ../conda_build_config.yaml pins run & build Qt versions
-    - mountainlab
+    - mountainlab>=0.15
 
 build:
-  number: 5
+  number: 6
   script:
     - set -e -u - x -o pipefail
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
-    - test -d "${ML_CONDA_PACKAGES_DIR}" # (set in mountainlab_activate.sh, a build requirement)
-
+    - ML_PACKAGE_DIR=`CONDA_PREFIX=$PREFIX ml-config package_directory`
+    - test -n "$ML_PACKAGE_DIR" # error if empty string
+    - test -d "$ML_PACKAGE_DIR" # error if not a directory
+    
     # These should both be set in mountainlab-conda/conda_build_config.yaml
     - test -d "${CONDA_BUILD_SYSROOT}" # [osx]
     - test -d "${XC_AVOIDANCE_PATH_QT}" # [osx]
@@ -33,7 +37,7 @@ build:
     - qmake -r  # don't need CONFIG+=standalone, conda handles binary relocation! (linux + mac)
     - make -j${CPU_COUNT}
     - make install
-    - cp packages/mv/bin/mv.mp "$ML_CONDA_PACKAGES_DIR"
+    - cp packages/mv/bin/mv.mp "$ML_PACKAGE_DIR"
     - cp bin/qt-mountainview "${PREFIX}"/bin
 
 test:
@@ -41,7 +45,6 @@ test:
     - which qt-mountainview
     - ml-list-processors
     - ml-spec mv.create_multiscale_timeseries
-    
 
 about:
   home: https://github.com/flatironinstitute/qt-mountainview
