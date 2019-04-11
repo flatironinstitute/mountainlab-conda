@@ -10,7 +10,7 @@ source:
   url: https://github.com/{{ repo_owner }}/{{ name }}/archive/{{ version }}.tar.gz
 
 build:
-  number: 0
+  number: 1
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     # vdom + jp_proxy_widget are not available as conda packages, so we install pinned
@@ -28,7 +28,6 @@ requirements:
   run:
     - mountainlab
     - python
-    - requests
     - numpy
     - numpydoc
     - requests # req'd by jp_proxy_widget
