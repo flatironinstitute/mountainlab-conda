@@ -1,15 +1,16 @@
 package:
     name: mountainsort
-    version: 4.2.0
+    version: 4.3.0
 build:
     number: 0
 requirements:
     run:
-        - ml_ephys=0.2.0
-        - ml_ms3=0.0.1
-        - ml_ms4alg=0.1.2
-        - mountainlab=0.13.0
-        - mountainlab_pytools=0.2.7
+        - mountainlab=0.15.2
+        - mountainlab_pytools=0.7.5
+        - ml_ms4alg=0.2.3
+        - ml_ephys=0.2.14
+        - ml_ms3=0.2.0
+
 # extra:
 #     copy_test_source_files: true
 #     final: true
