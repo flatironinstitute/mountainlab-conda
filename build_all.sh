@@ -10,7 +10,6 @@ recipe.ml_ms3 \
 recipe.ml_pyms \
 recipe.qt-mountainview \
 recipe.ephys-viz \
-recipe.mountainsort \
 "
 
 # avoid bootstrapping with existing published packages (i.e. don't include tjd2002/flatiron)
@@ -32,4 +31,4 @@ tmpfile=`mktemp ./pkglist.XXXXXX`
 conda build --output $channel_args $append_args $RECIPE_DIRS_ORDERED>$tmpfile
 ln -sf $tmpfile pkglist_latest
 
-echo 'Run "anaconda upload `cat pkglist_latest`" to upload all packages'
+echo 'Run "anaconda upload -u flatiron --skip-existing `cat pkglist_latest`" to upload all packages to the Flatiron channel'
