@@ -10,7 +10,7 @@ source:
   url: https://github.com/{{ repo_owner }}/{{ name }}/archive/v{{ version }}.tar.gz
 
 build:
-  number: 0
+  number: 1
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - tgzfile=$(npm pack)
@@ -39,6 +39,8 @@ requirements:
 test:
   imports:
     - jp_ephys_viz
+    - jp_proxy_widget
+    - vdom
   commands:
     - npm list -g ephys-viz
     - which ev-timeseries
