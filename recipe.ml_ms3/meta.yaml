@@ -30,7 +30,7 @@ requirements:
     - qt
 
 build:
-  number: 0
+  number: 1
   script:
     - set -e -u - x -o pipefail
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
@@ -44,15 +44,17 @@ build:
     
     # Include host env's /include to pick up fftw.
     - qmake INCLUDEPATH+=$PREFIX/include
-    - make -j${CPU_COUNT} sub-packages-ms3-ms3-pro
+    - make -j${CPU_COUNT}
 
     # Install in mountainlab packages directory
     - cp packages/ms3/bin/ms3.mp "$ML_PACKAGE_DIR"
+    - cp packages/mountainsortalg/bin/mountainsortalg.mp "$ML_PACKAGE_DIR"/ms3alg.mp
 
 test:
   commands:
     - ml-list-processors
     - ml-spec ms3.isolation_metrics
+    - ml-spec mountainsortalg.ms3alg
     
 about:
   home: https://github.com/flatironinstitute/mountainsort
