@@ -1,7 +1,7 @@
 {% set name = "ml_pyms" %}
 {% set repo_name = "mountainsort" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.2.0" %}
+{% set version = "0.2.1" %}
 
 # TODO:
 # -rename source dir from pyms to ml_pyms? Currently a little hacky
@@ -24,6 +24,8 @@ requirements:
     - pip
     - pybind11 >=2.2
     - fftw
+    - intel-openmp    # [linux]
+    - llvm-openmp     # [osx]
     - mountainlab>=0.15     # provides install locations, must be in host
   run:
     - python
@@ -38,7 +40,7 @@ requirements:
     - scikit-learn
 
 build:
-  number: 0
+  number: 3
   script:
     - set -e -u - x -o pipefail
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
