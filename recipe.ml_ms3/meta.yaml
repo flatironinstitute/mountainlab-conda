@@ -1,7 +1,7 @@
 {% set name = "ml_ms3" %}
 {% set repo_name = "mountainsort" %}
 {% set repo_owner = "flatironinstitute" %}
-{% set version = "0.2.0" %}
+{% set version = "0.2.4" %}
 
 # TODO:
 # -pin openmp build/run?
@@ -16,15 +16,14 @@ source:
 requirements:
   build:
     - {{ compiler('cxx') }}
-    - intel-openmp    # [linux]
-    - llvm-openmp     # [osx]
+    - openmp
   host:
     - qt {{ qt }}     # see ./conda_build_config.yaml for Qt variants specification
     - fftw            # libraries to be linked, must be in host and run?
+    - openmp
     - mountainlab>=0.15 # provides install locations, must be in host
   run:
-    - intel-openmp    # [linux]
-    - llvm-openmp     # [osx]
+    - openmp
     - fftw
     - mountainlab>=0.15
     - qt

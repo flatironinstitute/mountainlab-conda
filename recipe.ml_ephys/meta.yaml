@@ -10,7 +10,7 @@ source:
   url: https://github.com/{{ repo_owner }}/{{ name }}/archive/{{ version }}.tar.gz
 
 build:
-  number: 0
+  number: 1
   script:
     - test -n "$BUILT_FROM_TOPDIR" # error if not built from mountainlab-conda directory
     - python -m pip install --no-deps --ignore-installed .
@@ -24,12 +24,6 @@ requirements:
     - python
     - pip
     - mountainlab
-    - mountainlab_pytools
-    - deepdish
-    - scipy
-    - numpy
-    - numpydoc
-    - h5py
   run:
     - python
     - mountainlab
