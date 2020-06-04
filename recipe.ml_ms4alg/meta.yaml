@@ -1,6 +1,6 @@
 {% set name = "ml_ms4alg" %}
 {% set repo_owner = "magland" %}
-{% set version = "0.2.3" %}
+{% set version = "0.3.5" %}
 
 package:
   name: '{{ name|lower }}'
@@ -36,7 +36,11 @@ requirements:
     - mountainlab_pytools>=0.7.4
     - isosplit5
     - scikit-learn
-    
+    - dask
+    - pip
+    - pip:
+      - spikeextractors>=0.4.1
+
 test:
   imports:
     - ml_ms4alg
